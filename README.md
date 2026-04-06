@@ -5,7 +5,7 @@ Este é um projeto de gestão financeira desenvolvido em C#/.NET. A aplicação 
 ## 🚀 Tecnologias Utilizadas
 
 * **.NET (C#)** - Plataforma e linguagem principal de desenvolvimento.
-* **xUnit / NUnit / MSTest** - Framework para testes unitários (verifique qual está sendo utilizado no projeto `financeiro.Tests`).
+* **xUnit** - Framework para testes unitários.
 * **Moq** - (Provavelmente) Framework para criação de mocks nos testes de serviço.
 
 ## 🏗️ Estrutura do Projeto
@@ -15,7 +15,7 @@ A solução está dividida principalmente nas seguintes camadas:
 * **`financeiro` (Projeto Principal)**
   * **Domain:** Contém as entidades principais do negócio, regras estritas do domínio e validações (ex: `Usuario`).
   * **Application:** Contém as regras de negócio da aplicação e orquestração de chamadas (ex: `CriarUsuario`, serviços e casos de uso).
-  * **Infrastructure / API:** (Dependendo da evolução do projeto) Camadas de acesso a banco de dados, injeção de dependência e exposição dos endpoints.
+  * **Infrastructure / API:** Camadas de acesso a banco de dados, injeção de dependência e exposição dos endpoints.
 
 * **`financeiro.Tests` (Projeto de Testes)**
   * **Tests/Domain:** Testes unitários para garantir que as regras das entidades de domínio estão corretas (ex: `UsuarioTest`).
