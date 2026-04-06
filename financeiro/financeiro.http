@@ -1,0 +1,12 @@
+@financeiro_HostAddress = http://localhost:5236
+
+POST http://localhost:5000/api/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Ialo",
+  "email": "ialo@email.com",
+  "senha": "123456"
+}
+
+###
