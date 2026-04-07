@@ -39,7 +39,7 @@ public class UsuarioServiceTest
             _service.CriarUsuarioAsync(request)
         );
 
-        Assert.Equal("E-mail j· cadastrado.", exception.Message);
+        Assert.Equal("E-mail j√° cadastrado.", exception.Message);
     }
 
 }
