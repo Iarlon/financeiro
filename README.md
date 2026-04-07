@@ -36,9 +36,24 @@ Para executar e contribuir com este projeto, certifique-se de ter os seguintes i
  ```dotnet restore```
 4. Para compilar o projeto, execute:
  ```dotnet build```
-5. Para rodar a bateria de testes unitários:
- ```dotnet test```
+5. Para rodar a bateria de testes unitários é preciso primeiramente ir à pasta dos testes e após isso rodar os testes:
+ ```
+	cd financeiro.Tests
+	dotnet test
+ ```
+ -- EXTRA: se rodar esse código você consegue ter mais detalhes dos testes, sendo por exemplo com extensão que pode ser usada no Visual Studio como trx:
+ ```
+ dotnet test --logger "trx;LogFileName=TestResults.trx"
+ ```
+ Ficando assim: <br>
+ <img src="./financeiro.Tests/assets/usingTestResult.png" width="600">
+
 6. Para executar a aplicação principal:
  ```dotnet run --project financeiro```
  Ou ir ao diretório do projeto `financeiro` e executar:
  ```dotnet run```
+
+
+## Evidências de testes:
+<img src="./financeiro.Tests/assets/readmeImage.png" width="600">
+

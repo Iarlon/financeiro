@@ -1,0 +1,12 @@
+financeiro.Tests/TestResults/
+financeiro.Tests/bin/
+financeiro.Tests/obj/
+
+financeiro/bin
+financeiro/obj
+
+.vs/
+
+project.lock.json
+project.fragment.lock.json
+artifacts/
