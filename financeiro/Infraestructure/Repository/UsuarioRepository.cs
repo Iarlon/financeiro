@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using financeiro.Domain.Repository;
 using financeiro.Infraestructure.Database;
 using Financeiro.Domain.Entities;
@@ -17,8 +17,8 @@ public class UsuarioRepository : IUsuarioRepository
     public async Task CriarUsuario(Usuario usuario)
     {
         var sql = @"
-            insert into usuario (nome, email, senha)
-            values (@Nome, @Email, @Senha)";
+            INSERT INTO USUARIO (nome, email, senha)
+            VALUES (@Nome, @Email, @Senha)";
 
         using var connection = _connectionFactory.CreateConnection();
         await connection.ExecuteAsync(sql, usuario);
@@ -28,7 +28,7 @@ public class UsuarioRepository : IUsuarioRepository
     {
         var sql = @"
         SELECT EXISTS (
-            SELECT 1 FROM Usuario WHERE Email = @Email
+            SELECT 1 FROM USUARIO WHERE Email = @Email COLLATE NOCASE
         )";
 
         using var connection = _connectionFactory.CreateConnection();

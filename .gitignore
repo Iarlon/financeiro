@@ -1,11 +1,10 @@
-financeiro.Tests/TestResults/
-financeiro.Tests/bin/
-financeiro.Tests/obj/
-
-financeiro/bin
-financeiro/obj
+**/TestResults/
+**/bin/
+**/obj/
 
 .vs/
+.sonarqube/
+.env
 
 project.lock.json
 project.fragment.lock.json

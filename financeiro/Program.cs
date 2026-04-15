@@ -35,7 +35,7 @@ builder.Services.Scan(scan => scan
 
 // Configure PostgreSQL connection
 var connectionString =
-    builder.Configuration.GetConnectionString("Default");
+    builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddScoped<IDbConnection>(sp =>
     new NpgsqlConnection(connectionString));
