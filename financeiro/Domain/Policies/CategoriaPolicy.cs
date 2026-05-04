@@ -1,39 +1,43 @@
-﻿using Financeiro.Domain.Enums;
+using Financeiro.Domain.Enums;
 
 namespace Financeiro.Domain.Policies;
 
 internal static class CategoriaPolicy
 {
-    public static TipoMovimentacao TipoDaCategoria(Categoria categoria)
+    private static readonly HashSet<CategoriaEnum> CategoriasDespesa =
+    [
+        CategoriaEnum.Alimentacao,
+        CategoriaEnum.Moradia,
+        CategoriaEnum.Transporte,
+        CategoriaEnum.Lazer,
+        CategoriaEnum.Saude,
+        CategoriaEnum.Educacao,
+        CategoriaEnum.Investimentos
+    ];
+
+    private static readonly HashSet<CategoriaEnum> CategoriasReceita =
+    [
+        CategoriaEnum.Salario,
+        CategoriaEnum.Bonus,
+        CategoriaEnum.Freelance,
+        CategoriaEnum.HoraExtra,
+        CategoriaEnum.Comissao,
+        CategoriaEnum.Transferencias,
+        CategoriaEnum.Vendas,
+        CategoriaEnum.Servicos
+    ];
+
+    public static TipoMovimentacaoEnum TipoDaCategoria(CategoriaEnum categoria)
     {
-        return categoria switch
-        {
-            Categoria.Alimentacao or
-            Categoria.Moradia or
-            Categoria.Transporte or
-            Categoria.Lazer or
-            Categoria.Saude or 
-            Categoria.Educacao or 
-            Categoria.Investimentos
-                => TipoMovimentacao.despesa,
+        if (CategoriasDespesa.Contains(categoria))
+            return TipoMovimentacaoEnum.despesa;
 
-            Categoria.Salario or
-            Categoria.Bonus or
-            Categoria.Freelance or
-            Categoria.HoraExtra or
-            Categoria.Freelance or 
-            Categoria.Comissao or
-            Categoria.Transferencias or
-            Categoria.Vendas or
-            Categoria.Servicos
-                => TipoMovimentacao.receita,
+        if (CategoriasReceita.Contains(categoria))
+            return TipoMovimentacaoEnum.receita;
 
-            _ => throw new ArgumentOutOfRangeException(nameof(categoria))
-        };
+        throw new ArgumentOutOfRangeException(nameof(categoria));
     }
 
-    public static bool CategoriaEhCompativel(
-        Categoria categoria,
-        TipoMovimentacao tipo)
+    public static bool CategoriaEhCompativel(CategoriaEnum categoria, TipoMovimentacaoEnum tipo)
         => TipoDaCategoria(categoria) == tipo;
 }

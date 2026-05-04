@@ -1,13 +1,16 @@
-﻿using Financeiro.Domain.Enums;
+using Financeiro.Domain.Enums;
 using Financeiro.Domain.Exceptions;
 using Financeiro.Domain.Policies;
+using financeiro.Domain.Events;
+using financeiro.Domain.Common;
 
 namespace Financeiro.Domain.Entities;
 
-public class Movimentacao
+public class Movimentacao : Entity
 {
     public long Id { get; private set; }
     public int UsuarioId { get; private set; }
+    public int OrcamentoId {  get; private set; }
     public string? Tag { get; private set; }
     public string? Descricao { get; private set; }
     public decimal Valor { get; private set; }
@@ -18,14 +21,19 @@ public class Movimentacao
     public Movimentacao(
         decimal valor,
         Categoria categoria,
+        int orcamentoId,
         int usuarioId,
         TipoMovimentacao tipo
         )
     {
         AlterarTipo(tipo);
-        AlterarCategoria(categoria);
-        AlterarValor(valor);
+        DefinirCategoria(categoria);
+        DefinirValor(valor);
+        DefinirOrcamentoId(orcamentoId);
         DefinirUsuarioId(usuarioId);
+        DefinirDataCriacao();
+
+        AddDomainEvent(new MovimentacaoCriadaEvent(this));
     }
     public void AlterarTag(string tag)
     {
@@ -37,7 +45,14 @@ public class Movimentacao
         Descricao = descricao?.Trim();
     }
 
-    private void AlterarValor(decimal valor)
+    private void DefinirValor(decimal valor)
+    {
+        if (valor <= 0)
+            throw new DomainException("O valor deve ser maior que zero.");
+        Valor = valor;
+    }
+
+    public void AlterarValor(decimal valor)
     {
         if (valor <= 0)
             throw new DomainException("O valor deve ser maior que zero.");
@@ -49,19 +64,52 @@ public class Movimentacao
         Data = data ?? DateTime.UtcNow;
     }
 
-    public void DefinirUsuarioId(int usuarioId)
+    private void DefinirDataCriacao()
     {
-        if (usuarioId <= 0)
-            throw new DomainException("Não foi encontrado usuário para essa movimentação.");
-        UsuarioId = usuarioId;
+        Data = DateTime.UtcNow;
     }
 
-    private void AlterarCategoria(Categoria categoria)
+    private void DefinirUsuarioId(int orcamentoId)
+    {
+        if (orcamentoId <= 0)
+            throw new DomainException("Não foi encontrado usuário para essa movimentação.");
+
+        UsuarioId = orcamentoId;
+    }
+
+    private void AlterarCategoria(Categoria novaCategoria)
+    {
+        if (Categoria == novaCategoria)
+            return;
+
+        if (!CategoriaPolicy.CategoriaEhCompativel(novaCategoria, Tipo))
+            throw new DomainException("Categoria incompatível com o tipo da movimentação.");
+
+        var categoriaAntiga = Categoria;
+        Categoria = novaCategoria;
+
+        AddDomainEvent(new MovimentacaoReclassificadaEvent(
+            Id,
+            UsuarioId,
+            categoriaAntiga,
+            novaCategoria
+        ));
+    }
+
+    private void DefinirCategoria(Categoria categoria)
     {
         if (!CategoriaPolicy.CategoriaEhCompativel(categoria, Tipo))
             throw new DomainException("Categoria incompatível com o tipo da movimentação.");
 
         Categoria = categoria;
+    }
+    private void DefinirOrcamentoId(int orcamentoId)
+    {
+        if (orcamentoId <= 0)
+            throw new DomainException("Orçamento inválido para a movimentação.");
+
+        OrcamentoId = orcamentoId;
+
     }
 
     public void AlterarTipo(TipoMovimentacao tipo)

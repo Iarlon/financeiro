@@ -1,36 +1,27 @@
-﻿using Financeiro.Domain.Exceptions;
+using Financeiro.Domain.Enums;
+using Financeiro.Domain.Exceptions;
 
 namespace Financeiro.Domain.Entities;
 
 public class Orcamento
 {
+    public long Id { get; private set; }
     public int UsuarioId { get; private set; }
-    public int Ano { get; private set; }
-    public int Mes { get; private set; }
-    public decimal ValorMaximo { get; private set; }
+    public DateTime Periodo { get; private set; }
+    public decimal SaldoConta { get; private set; } = decimal.Zero;
 
-    public Orcamento(int usuarioId, int mes, int ano, decimal valorMaximo)
+    public Orcamento(int usuarioId, DateTime periodo)
     {
         DefineUsuarioId(usuarioId);
-        AlterarMesEAno(mes, ano);
-        AlterarValorMaximo(valorMaximo);
+        AlterarPeriodo(periodo);
+   
     }
 
-    public void AlterarValorMaximo(decimal valorMaximo)
+    public void AlterarPeriodo(DateTime dataReferencia)
     {
-        if (valorMaximo <= 0)
-            throw new DomainException("O valor máximo do orçamento deve ser maior que zero.");
-        ValorMaximo = valorMaximo;
-    }
-
-    public void AlterarMesEAno(int mes, int ano)
-    {
-        if (mes < 1 || mes > 12)
-            throw new DomainException("O mês do orçamento deve estar entre 1 e 12.");
-        if (ano < 2000)
+        if (dataReferencia.Year < 2000)
             throw new DomainException("O ano do orçamento é inválido.");
-        Mes = mes;
-        Ano = ano;
+        Periodo = new DateTime(dataReferencia.Year, dataReferencia.Month, 1);
     }
 
     public void DefineUsuarioId(int usuarioId)
@@ -38,5 +29,13 @@ public class Orcamento
         if (usuarioId <= 0)
             throw new DomainException("Não foi encontrado usuário para esse orçamento.");
         UsuarioId = usuarioId;
+    }
+
+    public void AtualizarSaldo(decimal valor, TipoMovimentacaoEnum tipo)
+    {
+        if (tipo == TipoMovimentacaoEnum.despesa)
+            SaldoConta -= valor;
+        else
+            SaldoConta += valor;
     }
 }

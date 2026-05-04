@@ -1,6 +1,6 @@
-﻿namespace Financeiro.Domain.Enums;
+namespace Financeiro.Domain.Enums;
 
-public enum Categoria
+public enum CategoriaEnum 
 {
     // despesa
     Alimentacao = 1,

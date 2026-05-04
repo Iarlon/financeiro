@@ -1,6 +1,6 @@
-﻿namespace Financeiro.Domain.Enums;
+namespace Financeiro.Domain.Enums;
 
-public enum PeriodicidadeAporte
+public enum PeriodicidadeAporteEnum
 {
     Mensal = 1,
     Bimestral = 2,

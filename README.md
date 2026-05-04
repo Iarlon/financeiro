@@ -2,6 +2,8 @@
 
 Este é um projeto de gestão financeira desenvolvido em C#/.NET. A aplicação foi estruturada focando em boas práticas de engenharia de software, utilizando princípios de separação de responsabilidades, como **Domain-Driven Design (DDD)** e **Clean Architecture**.
 
+<img src="http://localhost:9000/api/project_badges/measure?project=projetoLocal&metric=alert_status&token=sqb_7f12579150574b1eadbd6f3494d0c494d015f702">
+
 ## 🚀 Tecnologias Utilizadas
 
 * **.NET (C#)** - Plataforma e linguagem principal de desenvolvimento.

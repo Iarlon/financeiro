@@ -1,4 +1,4 @@
-﻿using Financeiro.Domain.Enums;
+using Financeiro.Domain.Enums;
 using Financeiro.Domain.Exceptions;
 
 namespace Financeiro.Domain.Entities;
@@ -8,82 +8,132 @@ public class Meta
     public long Id { get; private set; }
     public decimal ValorObjetivo { get; private set; }
     public DateTime DataFinal { get; private set; }
+    public int OrcamentoId { get; private set; }
     public decimal ValorAporte { get; private set; }
-    public PeriodicidadeAporte Periodicidade { get; private set; }
-    public string Descricao { get; set; }
+    public PeriodicidadeAporteEnum Periodicidade { get; private set; }
+    public string Descricao { get; private set; }
     public int UsuarioId { get; private set; }
-    public StatusAtual Status { get; private set; }
+    public StatusAtualEnum Status { get; private set; }
 
     public Meta(
         decimal valorObjetivo,
         DateTime dataFinal,
-        PeriodicidadeAporte periodicidade,
+        PeriodicidadeAporteEnum periodicidade,
         string descricao,
-        int usuario) {
-        AlterarValorFinal(valorObjetivo);
-        AlterarDescricao(descricao);
-        AlterarDataFinal(dataFinal);
-        AlterarPeriodicidade(periodicidade);
+        int usuarioId,
+        int orcamentoId,
+        decimal valorAporte) 
+    {
+        DefinirValorFinal(valorObjetivo);
+        DefinirDataFinal(dataFinal);
+        DefinirPeriodicidade(periodicidade);
+        DefinirDescricao(descricao);
+        DefinirUsuarioId(usuarioId);
+        DefinirOrcamento(orcamentoId);
+        DefinirAporte(valorAporte);
 
-        DefinirUsuarioId(usuario);
-        DefinirStatusInicial();
-        DefineInitialAporte();
+        ValorAporte = decimal.Zero;
+        Status = StatusAtualEnum.NaMeta;
     }
 
-    public void AlterarValorFinal(decimal valorObjetivo) {
+    private void DefinirValorFinal(decimal valorObjetivo) 
+    {
         if (valorObjetivo <= 0)
-            throw new Domain.Exceptions.DomainException("O valor objetivo da meta deve ser maior que zero.");
+            throw new DomainException("O valor objetivo da meta deve ser maior que zero.");
+        
         ValorObjetivo = valorObjetivo;
     }
 
-    public void AlterarDataFinal(DateTime dataFinal)
+    private void DefinirDataFinal(DateTime dataFinal)
     {
         if (dataFinal <= DateTime.UtcNow)
-            throw new Domain.Exceptions.DomainException("A data final da meta deve ser uma data futura.");
+            throw new DomainException("A data final da meta deve ser uma data futura.");
+        
         DataFinal = dataFinal;
     }
 
-    public void AlterarDescricao(string descricao)
+    private void DefinirDescricao(string descricao)
     {
         if (string.IsNullOrWhiteSpace(descricao))
-            throw new Domain.Exceptions.DomainException("A descrição da meta não pode ser vazia.");
+            throw new DomainException("A descrição da meta não pode ser vazia.");
+        
         Descricao = descricao.Trim();
+    }
+
+    private void DefinirPeriodicidade(PeriodicidadeAporteEnum periodicidade)
+    {
+        if (!Enum.IsDefined(typeof(PeriodicidadeAporteEnum), periodicidade))
+            throw new DomainException("Periodicidade inválida.");
+
+        Periodicidade = periodicidade;
     }
 
     private void DefinirUsuarioId(int usuarioId)
     {
         if (usuarioId <= 0)
-            throw new Domain.Exceptions.DomainException("Não foi encontrado usuário para essa meta.");
+            throw new DomainException("Não foi encontrado usuário válido para essa meta.");
+        
         UsuarioId = usuarioId;
     }
-    public void AlterarPeriodicidade(PeriodicidadeAporte periodicidade)
+
+    private void DefinirOrcamento(int orcamentoId)
     {
-        if (!Enum.IsDefined(typeof(PeriodicidadeAporte), periodicidade))
+        if (orcamentoId <= 0)
+            throw new DomainException("Orçamento inválido.");
+            
+        OrcamentoId = orcamentoId;
+    }
+
+    private void DefinirAporte(decimal valorAporte)
+    {
+        if (valorAporte <= 0)
+            throw new DomainException("O valor do aporte adicionado deve ser maior que zero.");
+            
+        ValorAporte = valorAporte;
+    }
+    
+    public void AlterarValorAporte(decimal valorAporte)
+    {
+        if (valorAporte <= 0)
+            throw new DomainException("O valor do aporte adicionado deve ser maior que zero.");
+            
+        ValorAporte += valorAporte;
+    }
+
+    public void AtualizarStatusAtual(StatusAtualEnum status)
+    {
+        if (!Enum.IsDefined(typeof(StatusAtualEnum), status))
+            throw new DomainException("Status inválido.");
+            
+        Status = status;
+    }
+
+    public void AtualizarPeriodicidade(PeriodicidadeAporteEnum periodicidade)
+    {
+        if (!Enum.IsDefined(typeof(PeriodicidadeAporteEnum), periodicidade))
             throw new DomainException("Periodicidade inválida.");
 
         Periodicidade = periodicidade;
     }
-    private void DefinirStatusInicial()
+
+    public void AtualizarDataFinal(DateTime dataFinal)
     {
-        Status = StatusAtual.NaMeta;
+        if (dataFinal <= DateTime.UtcNow)
+            throw new DomainException("A data final da meta deve ser uma data futura.");
+
+        DataFinal = dataFinal;
     }
 
-    public void AtualizarStatusAtual(StatusAtual status)
+    public void AtualizarValorObjetivo(decimal valorObjetivo)
     {
-        if (!Enum.IsDefined(typeof(StatusAtual), status))
-            throw new DomainException("Status inválido.");
-        Status = status;
+        if (valorObjetivo <= 0)
+            throw new DomainException("O valor objetivo da meta deve ser maior que zero.");
+        ValorObjetivo = valorObjetivo;
     }
-
-    public void RegistrarAporte(decimal valorAporte)
+     public void AtualizarDescricao(string descricao)
     {
-        if (valorAporte < 0)
-            throw new DomainException("O valor do aporte não pode ser negativo.");
-        ValorAporte = valorAporte;
-    }
-
-    private void DefineInitialAporte()
-    {
-        ValorAporte = 0;
+        if (string.IsNullOrWhiteSpace(descricao))
+            throw new DomainException("A descrição da meta não pode ser vazia.");
+        Descricao = descricao.Trim();
     }
 }
