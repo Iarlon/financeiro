@@ -8,7 +8,9 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_ENABLE_SOLUTION_FILE_EXPERIMENTAL: 1
 
     steps:
     - name: Checkout do código
@@ -17,13 +19,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x' 
+        dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore financeiro.slnx
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build financeiro.slnx --no-restore --configuration Release
 
     - name: Test
-      run: dotnet test ./financeiro.Tests/Financeiro.Tests.csproj --configuration Release --no-build
+      run: dotnet test financeiro.slnx --configuration Release --no-build
