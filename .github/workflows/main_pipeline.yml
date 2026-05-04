@@ -21,6 +21,9 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: Debug estrutura
+      run: ls -R
+
     - name: Restore dependencies
       run: dotnet restore financeiro.sln
 
