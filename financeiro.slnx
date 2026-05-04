@@ -2,6 +2,6 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
-  <Project Path="financeiro/financeiro.csproj" />
-  <Project Path="financeiro.Tests/Financeiro.Tests.csproj" />
+  <Project Path="./financeiro/financeiro.csproj" />
+  <Project Path="./financeiro.Tests/Financeiro.Tests.csproj" />
 </Solution>
