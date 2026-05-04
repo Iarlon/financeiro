@@ -14,16 +14,16 @@ public class Movimentacao : Entity
     public string? Tag { get; private set; }
     public string? Descricao { get; private set; }
     public decimal Valor { get; private set; }
-    public Categoria Categoria { get; private set; }
+    public CategoriaEnum Categoria { get; private set; }
     public DateTime Data { get; private set; }
-    public TipoMovimentacao Tipo { get; private set; }
+    public TipoMovimentacaoEnum Tipo { get; private set; }
 
     public Movimentacao(
         decimal valor,
-        Categoria categoria,
+        CategoriaEnum categoria,
         int orcamentoId,
         int usuarioId,
-        TipoMovimentacao tipo
+        TipoMovimentacaoEnum tipo
         )
     {
         AlterarTipo(tipo);
@@ -77,7 +77,7 @@ public class Movimentacao : Entity
         UsuarioId = orcamentoId;
     }
 
-    private void AlterarCategoria(Categoria novaCategoria)
+    private void AlterarCategoria(CategoriaEnum novaCategoria)
     {
         if (Categoria == novaCategoria)
             return;
@@ -96,7 +96,7 @@ public class Movimentacao : Entity
         ));
     }
 
-    private void DefinirCategoria(Categoria categoria)
+    private void DefinirCategoria(CategoriaEnum categoria)
     {
         if (!CategoriaPolicy.CategoriaEhCompativel(categoria, Tipo))
             throw new DomainException("Categoria incompatível com o tipo da movimentação.");
@@ -112,7 +112,7 @@ public class Movimentacao : Entity
 
     }
 
-    public void AlterarTipo(TipoMovimentacao tipo)
+    public void AlterarTipo(TipoMovimentacaoEnum tipo)
     {
         if (!CategoriaPolicy.CategoriaEhCompativel(Categoria, tipo))
             throw new DomainException("Tipo incompatível com a categoria.");
