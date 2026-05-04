@@ -22,10 +22,10 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore financeiro.slnx
+      run: dotnet restore financeiro.sln
 
     - name: Build
-      run: dotnet build financeiro.slnx --no-restore --configuration Release
+      run: dotnet build financeiro.sln --no-restore --configuration Release
 
     - name: Test
-      run: dotnet test financeiro.slnx --configuration Release --no-build
+      run: dotnet test financeiro.sln --configuration Release --no-build
